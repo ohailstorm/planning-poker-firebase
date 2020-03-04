@@ -4,10 +4,12 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
+    "start": "npm run build && npm run server",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently \"npm run webpack\" \"npm run server\"",
     "server": "nodemon --exec babel-node src/server.js",
-    "webpack": "webpack -wd"
+    "webpack": "webpack -wd",
+    "build": "webpack"
   },
   "author": "ohailstorm",
   "license": "MIT",
