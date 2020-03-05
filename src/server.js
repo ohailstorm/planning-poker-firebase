@@ -9,14 +9,21 @@ app.use(compression());
 app.use(express.static("public"));
 app.use(express.json()); // for parsing application/json
 
-app.use(function(req, res, next) {
-  if (req.protocol === "http") {
-    if (req.hostname !== "localhost") {
-      res.redirect("https://" + req.headers.host + req.url);
-    }
+//HTTPS redirect middleware
+function ensureSecure(req, res, next) {
+  if (
+    req.get("X-Forwarded-Proto") === "https" ||
+    req.hostname === "localhost"
+  ) {
+    next();
+  } else if (
+    req.get("X-Forwarded-Proto") !== "https" &&
+    req.get("X-Forwarded-Port") !== "443"
+  ) {
+    //Redirect if not HTTP with original request URL
+    res.redirect("https://" + req.hostname + req.url);
   }
-  next();
-});
+}
 
 app.use("/api", api);
 app.use("/", ssr);
