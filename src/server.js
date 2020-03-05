@@ -10,11 +10,12 @@ app.use(express.static("public"));
 app.use(express.json()); // for parsing application/json
 
 app.use(function(req, res, next) {
-  console.log(req.host);
-
-  if (!req.secure && req.host !== "localhost") {
-    res.redirect("https://" + req.headers.host + req.url);
-  } else next();
+  if (!req.secure) {
+    if (req.hostname !== "localhost") {
+      res.redirect("https://" + req.headers.host + req.url);
+    }
+  }
+  next();
 });
 
 app.use("/api", api);
