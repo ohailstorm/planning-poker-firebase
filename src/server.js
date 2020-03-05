@@ -13,6 +13,13 @@ app.use("/api", api);
 app.use("/", ssr);
 
 const port = process.env.PORT || 8080;
+
+app.use(function(req, res, next) {
+  if (req.get("X-Forwarded-Proto") !== "https") {
+    res.redirect("https://" + req.get("Host") + req.url);
+  } else next();
+});
+
 app.listen(port, function listenHandler() {
   console.info(`Running on ${port}...`);
 });
