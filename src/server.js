@@ -10,7 +10,7 @@ app.use(express.static("public"));
 app.use(express.json()); // for parsing application/json
 
 app.use(function(req, res, next) {
-  if (!req.secure) {
+  if (req.protocol === "http") {
     if (req.hostname !== "localhost") {
       res.redirect("https://" + req.headers.host + req.url);
     }
